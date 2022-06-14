@@ -11,9 +11,12 @@ def PolyFunction(lowestDeg, highestDeg, n=2):
     return function
 
 
-
 def main():
     print(PolyFunction(1,10))
 
 if __name__ == "__main__":
     main()
+
+
+print(3)
+print(4)
