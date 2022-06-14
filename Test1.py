@@ -18,5 +18,16 @@ if __name__ == "__main__":
     main()
 
 
-print(3)
-print(4)
+def calc_a(Atr1, Atr2):
+    s1 = {Atr1: 1, Atr2: 0}
+    s2 = {Atr1: 1, Atr2: 1}
+
+    choice = False
+    while(choice == False):
+        print(s1)
+        print(s2)
+        s = input("Choose between the above tuples: ")
+        if(s == 1):
+            choice = True
+        else:
+            s1[Atr1] = s1[Atr1] * 2
