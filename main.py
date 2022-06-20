@@ -22,7 +22,8 @@ def main():
     print("Bound for L: ", hL)
 
     print("Bound for Z: ", hZ)
-    print("Bound for Z: ", hA)
+
+    print("Bound for A: ", hA)
 
     uI = getUi(get_ave(hB), get_ave(hL), get_ave(hZ))
 
