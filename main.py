@@ -8,7 +8,7 @@ d = 2  # NUMBER OF ATTRIBUTES TO SHOW
 
 
 def main():
-    iteration = 10
+    iteration = 20
     lowestDeg = 1
     highestDeg = 5
 
@@ -46,25 +46,25 @@ def main():
     # The form of our function [coefficents, powers]
     print(f)
 
-    u_i, m_i, m_istar = runSim(100, iteration, lowestDeg, highestDeg)
+    # u_i, m_i, m_istar = runSim(100, iteration, lowestDeg, highestDeg)
 
-    u_i_df = pd.Series(u_i)
-    m_i_df = pd.Series(m_i)
-    m_istar_df = pd.Series(m_istar)
+    # u_i_df = pd.Series(u_i)
+    # m_i_df = pd.Series(m_i)
+    # m_istar_df = pd.Series(m_istar)
 
-    print("---------------------------------------------------------")
-    print("---------------------------------------------------------")
-    print("Ui data: ", u_i_df.describe())
+    # print("---------------------------------------------------------")
+    # print("---------------------------------------------------------")
+    # print("Ui data: ", u_i_df.describe())
 
-    print("---------------------------------------------------------")
-    print("---------------------------------------------------------")
-    print("M_i data: ", m_i_df.describe())
+    # print("---------------------------------------------------------")
+    # print("---------------------------------------------------------")
+    # print("M_i data: ", m_i_df.describe())
 
-    print("---------------------------------------------------------")
-    print("---------------------------------------------------------")
-    print("M_i_star data: ", m_istar_df.describe())
-    print("---------------------------------------------------------")
-    print("---------------------------------------------------------")
+    # print("---------------------------------------------------------")
+    # print("---------------------------------------------------------")
+    # print("M_i_star data: ", m_istar_df.describe())
+    # print("---------------------------------------------------------")
+    # print("---------------------------------------------------------")
 
 
 if __name__ == "__main__":

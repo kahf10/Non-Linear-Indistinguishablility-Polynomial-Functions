@@ -5,10 +5,19 @@ s = 2  # NUMBER OF TUPLES TO SHOW
 d = 2  # NUMBER OF ATTRIBUTES TO SHOW
 
 
+def getRand():
+    for i in range(100):
+        a = random.random()
+        if(a <= 0.5):
+            return a
+
+
 def randomPoly(lowestDeg, highestDeg, n=2):
     coefficents = [random.random() for i in range(n)]
     powers = [random.randint(lowestDeg, highestDeg) for i in range(n)]
     coefficents[1] = 1  # Setting iStar
+    coefficents[0] = random.randrange(0, 5)/10  # Setting iStar
+
     return [coefficents, powers]
 
 
@@ -46,7 +55,7 @@ def getI_star(function):
 
 
 def get_ave(bound):
-    return (sum(bound)/len(bound))
+    return float(sum(bound)/len(bound))
 
 
 def find_h(f, d=2, iter=10, show=False):
@@ -54,8 +63,8 @@ def find_h(f, d=2, iter=10, show=False):
 
     i_star = getI_star(f)
 
-    hBound = [0, 1]
-    tupleSet = [[0, 1], [1, 0]]
+    hBound = [1, 2]
+    tupleSet = [[2, 0], [0, 1]]
     count = 0
 
     while(count < iter):
@@ -73,7 +82,7 @@ def find_h(f, d=2, iter=10, show=False):
 
             shownTuple.append(t)
 
-        # shownTuple[1][0] = 1
+        shownTuple[1][0] = 0
         # shownTuple[0][1] = 1
 
         max_score_index = getUtilityScore(f, shownTuple)
@@ -87,7 +96,9 @@ def find_h(f, d=2, iter=10, show=False):
         if(show):
             print('=========== Round', count, '===========')
             print(shownTuple)
+            print('================================')
             print('USER PICKED TUPLE', max_score_index+1)
+            print('--------------------------------')
             print('------- New Bound for H --------')
             print(hBound)
             print('                                      ')
@@ -99,10 +110,10 @@ def find_h(f, d=2, iter=10, show=False):
 def find_l(hBound, f, d=2, iter=10, show=False):
     # Showing default tuples
 
-    s1 = [1, 1]  # Control Tuple
-    s2 = [2, sum(hBound) / len(hBound)]  # Given Tuple
+    s1 = [get_ave(hBound), 1]  # Control Tuple
+    s2 = [0, 2]  # Given Tuple
     i_star = getI_star(f)
-    lBound = [s1[0], s2[0]]
+    lBound = [1, 2]
     tupleSet = [s1, s2]
     count = 0
 
@@ -116,10 +127,10 @@ def find_l(hBound, f, d=2, iter=10, show=False):
             chi_j = float(lBound[0] + (j*(
                 lBound[1]-lBound[0]))/s)
             chi.append(chi_j)
-            t = [chi_j, tupleSet[j][i_star]]
+            t = [tupleSet[j][0], chi_j]
             shownTuple.append(t)
 
-        shownTuple[0][0] = 1
+        shownTuple[0][0] = get_ave(hBound)
 
         max_score_index = getUtilityScore(f, shownTuple)
 
@@ -131,7 +142,9 @@ def find_l(hBound, f, d=2, iter=10, show=False):
         if(show):
             print('=========== Round', count, '===========')
             print(shownTuple)
+            print('================================')
             print('USER PICKED TUPLE', max_score_index+1)
+            print('--------------------------------')
             print('------- New Bound for L --------')
             print(lBound)
             print('                                      ')
@@ -174,7 +187,9 @@ def find_z(f, d=2, iter=10, show=False):
         if(show):
             print('=========== Round', count, '===========')
             print(shownTuple)
+            print('================================')
             print('USER PICKED TUPLE', max_score_index+1)
+            print('--------------------------------')
             print('------- New Bound for Z --------')
             print(zBound)
             print('                                      ')
@@ -184,13 +199,15 @@ def find_z(f, d=2, iter=10, show=False):
 
 def find_a(f, hB, hL, Hz, d=2, iter=10, show=False):
     # Showing default tuples
-    lowerBounda = float(2/getMiStar(get_ave(hL)))
-
+    upperBounda = float(2/(math.pow(get_ave(Hz), math.log(2, get_ave(hL)))))
     s1 = [1, 0]  # Control Tuple
     s2 = [0, get_ave(hL)]  # Given Tuple
     i_star = getI_star(f)
     i = 0
-    aBound = [lowerBounda, 1]
+    aBound = [1, upperBounda]
+
+    print("INTITAL BOUND OF A: ", aBound)
+
     tupleSet = [s1, s2]
     count = 0
 
@@ -204,10 +221,11 @@ def find_a(f, hB, hL, Hz, d=2, iter=10, show=False):
             chi_j = aBound[0] + (j*(
                 aBound[1]-aBound[0]))/s
             chi.append(chi_j)
-            t = [chi_j, tupleSet[j][i_star]]
-            t = [tupleSet[j][i], chi_j]
+            t = [chi_j, 0]
+            # t = [chi_j, tupleSet[j][i]]
             shownTuple.append(t)
 
+        shownTuple[0][0] = chi_j
         shownTuple[1][0] = 0
         shownTuple[1][1] = get_ave(hL)
 
@@ -219,7 +237,9 @@ def find_a(f, hB, hL, Hz, d=2, iter=10, show=False):
         if(show):
             print('=========== Round', count, '===========')
             print(shownTuple)
+            print('================================')
             print('USER PICKED TUPLE', max_score_index+1)
+            print('--------------------------------')
             print('------- New Bound for a --------')
             print(aBound)
             print('                                      ')
