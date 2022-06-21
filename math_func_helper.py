@@ -38,7 +38,7 @@ def getUtilityScore(function, tupleSet):
 def getMi(h, l, z, a):
     # Calculate the value of Mi
     ui = getUi(h, l, z)
-    return math.log(a, float(2/ui))
+    return math.log(float(2/ui), a)
 
 
 def getI_star(function):
