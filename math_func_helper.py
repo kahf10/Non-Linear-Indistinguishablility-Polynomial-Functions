@@ -21,6 +21,23 @@ def randomPoly(lowestDeg, highestDeg, n=2):
     return [coefficents, powers]
 
 
+def revCalc(ui, uis, mi, mis):
+    #h:
+    h = math.pow((1/ui),(1/mi))
+    print("h = ", h) 
+
+    #z:
+    z = math.pow(ui, (1/mis))
+    print("z = ", z)
+
+    #l:
+    l = math.pow(2, (1/mis))
+    print("l = ", l)
+
+    #a:
+    a = math.pow((2/ui),(1/mi))
+    print("a = ", a)
+
 def getMiStar(l):
     # Calculate the value of Mi*
     return math.log(2, l)
@@ -58,7 +75,7 @@ def get_ave(bound):
     return float(sum(bound)/len(bound))
 
 
-def find_h(f, d=2, iter=10, show=False):
+def find_h(f, d, iter, show=False):
     # Showing default tuples
 
     i_star = getI_star(f)
