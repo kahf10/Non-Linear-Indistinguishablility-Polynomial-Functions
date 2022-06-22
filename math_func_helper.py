@@ -1,19 +1,24 @@
 import math
 import random
+from intial_variables import *
+
 
 s = 2  # NUMBER OF TUPLES TO SHOW
 d = 2  # NUMBER OF ATTRIBUTES TO SHOW
 
 
 def getRand():
-    for i in range(100):
-        a = random.random()
-        if(a <= 0.5):
-            return a
+    a = random.random()
+    if(a > 0.1 and a < 0.9):
+        return a
+    elif(a > 0.9):
+        return a - 0.1
+    else:
+        return a + 0.1
 
 
 def randomPoly(lowestDeg, highestDeg, n=2):
-    coefficents = [random.random() for i in range(n)]
+    coefficents = [getRand() for i in range(n)]
     powers = [random.randint(lowestDeg, highestDeg) for i in range(n)]
     coefficents[1] = 1  # Setting iStar
     # coefficents[0] = random.randrange(1, 5)/10  # Setting iStar
@@ -88,7 +93,7 @@ def find_h(f, d, iter, show=False):
 
     i_star = getI_star(f)
 
-    hBound = [1, 2]
+    hBound = [1, H_INITIAL_UPPER_BOUND]
     tupleSet = [[2, 0], [0, 1]]
     count = 0
 
