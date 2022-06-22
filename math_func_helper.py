@@ -16,27 +16,28 @@ def randomPoly(lowestDeg, highestDeg, n=2):
     coefficents = [random.random() for i in range(n)]
     powers = [random.randint(lowestDeg, highestDeg) for i in range(n)]
     coefficents[1] = 1  # Setting iStar
-    coefficents[0] = random.randrange(0, 5)/10  # Setting iStar
+    # coefficents[0] = random.randrange(1, 5)/10  # Setting iStar
 
     return [coefficents, powers]
 
 
 def revCalc(ui, uis, mi, mis):
-    #h:
-    h = math.pow((1/ui),(1/mi))
-    print("h = ", h) 
+    # h:
+    h = math.pow((1/ui), (1/mi))
+    print("h = ", h)
 
-    #z:
+    # z:
     z = math.pow(ui, (1/mis))
     print("z = ", z)
 
-    #l:
+    # l:
     l = math.pow(2, (1/mis))
     print("l = ", l)
 
-    #a:
-    a = math.pow((2/ui),(1/mi))
-    print("a = ", a)
+    # a:
+    # a = math.pow((2/ui), (1/mi))
+    # print("a = ", a)
+
 
 def getMiStar(l):
     # Calculate the value of Mi*
@@ -47,6 +48,13 @@ def getUi(h, l, z):
     # Calculate the value of Ui
     miStar = getMiStar(l)
     return math.pow(z, miStar)
+
+
+def getMi(h, ui):
+    if(ui == 0):
+        print('-------', 'ui is 0', '-------')
+        return 1.0
+    return -math.log(ui, h)
 
 
 def getUtilityScore(function, tupleSet):
@@ -61,10 +69,10 @@ def getUtilityScore(function, tupleSet):
     return scoreSet.index(max(scoreSet))
 
 
-def getMi(h, l, z, a):
-    # Calculate the value of Mi
-    ui = getUi(h, l, z)
-    return math.log(float(2/ui), a)
+# def getMi(h, l, z, a):
+#     # Calculate the value of Mi
+#     ui = getUi(h, l, z)
+#     return math.log(float(2/ui), a)
 
 
 def getI_star(function):
@@ -148,6 +156,7 @@ def find_l(hBound, f, d=2, iter=10, show=False):
             shownTuple.append(t)
 
         shownTuple[0][0] = get_ave(hBound)
+        shownTuple[0][1] = 1
 
         max_score_index = getUtilityScore(f, shownTuple)
 

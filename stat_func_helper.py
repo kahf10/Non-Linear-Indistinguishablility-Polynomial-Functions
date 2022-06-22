@@ -2,7 +2,7 @@ import math
 from math_func_helper import *
 
 
-def getDIP(newNum, ogNum): 
+def getDIP(newNum, ogNum):
     """
     Use: To get the difference in percentage error between the original value and the new value we calculated.
     Arguments: 
@@ -10,8 +10,10 @@ def getDIP(newNum, ogNum):
         ogNum - The original value we had;
     Return: Returns the different percentage. 
     """
-    temp = abs(newNum-ogNum) # Calculates the difference
-    return float(temp/ogNum)*100 # Calculates the difference percentage and returns it
+    # print(ogNum)
+    temp = abs(newNum-ogNum)  # Calculates the difference
+    # Calculates the difference percentage and returns it
+    return float(temp/ogNum)*100
 
 
 def runSim(times, inter, lowestDeg, highestDeg, d=2):
@@ -26,29 +28,35 @@ def runSim(times, inter, lowestDeg, highestDeg, d=2):
     Return: Returns the calculated u_i, m_i and m_i* after running the simulation. 
     """
 
-    count = 0 # Keeps count of the number of simulations ran until now
-    u_iL = [] # List to store the values of u_i for the different utility function
-    m_iL = [] # List to store the different values of m_i for the different utility function
-    m_i_starL = [] # List to store the different valus of m_i_star # for the different utility function 
+    count = 0  # Keeps count of the number of simulations ran until now
+    u_iL = []  # List to store the values of u_i for the different utility function
+    m_iL = []  # List to store the different values of m_i for the different utility function
+    m_i_starL = []  # List to store the different valus of m_i_star # for the different utility function
 
-    while(count < times): # While we haven't exceeded the number of simulations 
+    while(count < times):  # While we haven't exceeded the number of simulations
 
-        f = randomPoly(lowestDeg, highestDeg) # Creates a random utility function 
-        hB = find_h(f, 2, inter) # Finds the range for B
-        hL = find_l(hB, f, 2, inter) # Finds the range for L
-        hZ = find_z(f, 2, inter) # Finds the range for Z 
-        hA = find_a(f, hB, hL, hZ, 2, inter) # Finds the range for A
+        # Creates a random utility function
+        f = randomPoly(lowestDeg, highestDeg)
+        hB = find_h(f, 2, inter)  # Finds the range for B
+        hL = find_l(hB, f, 2, inter)  # Finds the range for L
+        hZ = find_z(f, 2, inter)  # Finds the range for Z
+        # hA = find_a(f, hB, hL, hZ, 2, inter)  # Finds the range for A
 
-        uI = getUi(get_ave(hB), get_ave(hL), get_ave(hZ)) # Finds the uI value using the above ranges
+        # Finds the uI value using the above ranges
+        uI = getUi(get_ave(hB), get_ave(hL), get_ave(hZ))
 
-        mi_star = getMiStar(get_ave(hL)) # Finds the mi_star value using the above ranges 
+        # Finds the mi_star value using the above ranges
+        mi_star = getMiStar(get_ave(hL))
 
-        m_i = getMi(get_ave(hB), get_ave(hL), get_ave(hZ), get_ave(hA)) # Finds the m_i value using the above ranges
+        m_i = getMi(get_ave(hB), uI)
 
-        count += 1 # Increases number of simulations done 
+        count += 1  # Increases number of simulations done
 
-        u_iL.append(getDIP(uI, f[0][0])) # Adds the error percentage to the u_i List
-        m_iL.append(getDIP(m_i, f[1][0])) # Adds the error percentage to the m_i List
-        m_i_starL.append(getDIP(mi_star, f[1][1])) # Adds the error percentage to the m_i_star List
+        # Adds the error percentage to the u_i List
+        u_iL.append(getDIP(uI, f[0][0]))
+        # Adds the error percentage to the m_i List
+        m_iL.append(getDIP(m_i, f[1][0]))
+        # Adds the error percentage to the m_i_star List
+        m_i_starL.append(getDIP(mi_star, f[1][1]))
 
-    return u_iL, m_iL, m_i_starL # Returns all the final values
+    return u_iL, m_iL, m_i_starL  # Returns all the final values
