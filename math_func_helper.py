@@ -8,6 +8,12 @@ d = 2  # NUMBER OF ATTRIBUTES TO SHOW
 
 
 def getRand():
+    """
+    Use: The function randomly calculates a value for 'a' and then checks if it is within the scaling range or not.
+        If not within the range, it adjusts accordingly.
+    Arguments: None
+    Return: Returns the value of a (adjusted if need be)
+    """
     a = random.random()
     if(a > 0.1 and a < 0.9):
         return a
@@ -18,15 +24,33 @@ def getRand():
 
 
 def randomPoly(lowestDeg, highestDeg, n=2):
-    coefficents = [getRand() for i in range(n)]
-    powers = [random.randint(lowestDeg, highestDeg) for i in range(n)]
-    coefficents[1] = 1  # Setting iStar
-    # coefficents[0] = random.randrange(1, 5)/10  # Setting iStar
+    """
+    Use: Creates a random polynomial functino for testing
+    Arguments:
+        lowestDeg: The lowest degree of power for the polynomial function
+        highestDeg: The highest degree of power for the polynomial function
+        n: The number of terms in the function where each represents one attribute
+    Return: Retuns a list of lists that contain the coefficients in the first inner list and the powers in the second.
+        Each of them have the most significant attribute / i^star attribute at the very end.
+    """
+    coefficents = [getRand() for i in range(n)] # Randomly creates coefficents each term in the function
+    powers = [random.randint(lowestDeg, highestDeg) for i in range(n)] # Randomly creates powers for each term in the function within the given range
+    coefficents[1] = 1  # Setting iStar 
 
     return [coefficents, powers]
 
 
 def revCalc(ui, uis, mi, mis):
+    """
+    Use: Reverse calculates the values of h, z, l for the given function in order to cross check the actual and calculated value
+        of each and prints them
+    Arguments:
+        ui: Contains the coefficient value for the non-most-significant terms in the function
+        uis: Contains the coefficient value for the most-significant term in the function
+        mi: Contains the power value for the non-most-significant terms in the function
+        mis: Contains the power value for the most-significant term in the function
+    Return: None
+    """
     # h:
     h = math.pow((1/ui), (1/mi))
     print("h = ", h)
@@ -39,53 +63,84 @@ def revCalc(ui, uis, mi, mis):
     l = math.pow(2, (1/mis))
     print("l = ", l)
 
-    # a:
-    # a = math.pow((2/ui), (1/mi))
-    # print("a = ", a)
-
 
 def getMiStar(l):
+    """
+    Use: Calculates the mi_star value for the function using the value of l
+    Arguments: 
+        l: The 'l' value we found for that attribute of the function    
+    Return: Returns the calculated mi_star value for the function
+    """
     # Calculate the value of Mi*
     return math.log(2, l)
 
 
 def getUi(h, l, z):
+    """
+    Use: Calculates the ui value for the function using the value of l and z and mi_star
+    Arguments: 
+        h: The 'h' value we found for that attribute of the function
+        l: The 'l' value we found for that attribute of the function    
+        z" The 'z' value we found for that atrribute of the function
+    Return: Returns the calculated ui value for the function
+    """
     # Calculate the value of Ui
-    miStar = getMiStar(l)
+    miStar = getMiStar(l) # Calculating the value of mi_star 
     return math.pow(z, miStar)
 
 
 def getMi(h, ui):
-    if(ui == 0):
+    """
+    Use: Calculates the mi value for the function using the value of h and ui
+    Arguments: 
+        h: The 'h' value we found for that attribute of the function
+        l: The 'l' value we found for that attribute of the function    
+        z" The 'z' value we found for that atrribute of the function
+    Return: Returns the calculated mi value for the function
+    """
+    if(ui == 0): # In the case where we find out that the attribute does not matter at all to the user
         print('-------', 'ui is 0', '-------')
         return 1.0
-    return -math.log(ui, h)
+    return -math.log(ui, h) 
 
 
 def getUtilityScore(function, tupleSet):
+    """
+    Use: Calculates the utility score for the given tuples when inserted in the function and returns the one with the most
+    Arguments: 
+        function: Stores the function that was randomly created
+        tupleSet: Stores the tuple set 
+    Return: Returns the calculated score value for the tuple set
+    """
     score = 0
     scoreSet = []
-    for tuple in tupleSet:
+    for tuple in tupleSet: # Goes through tuple in the tuple set
         score = 0
-        for i in range(len(function)):
-            score += float((math.pow(tuple[i], function[1][i]))*function[0][i])
+        for i in range(len(function)): # Goes through each value in the function: the coefficients and the powers
+            score += float((math.pow(tuple[i], function[1][i]))*function[0][i]) # Calculates the score
         scoreSet.append(score)
 
-    return scoreSet.index(max(scoreSet))
-
-
-# def getMi(h, l, z, a):
-#     # Calculate the value of Mi
-#     ui = getUi(h, l, z)
-#     return math.log(float(2/ui), a)
+    return scoreSet.index(max(scoreSet)) # Returns the tuple with the maximum score
 
 
 def getI_star(function):
-    return function[0].index(max(function[0]))
+    """
+    Use: Finds out the most important attribute to the user
+    Arguments:
+        function: Consists of the function that was randomly created
+    Returns: Returns the attribute that is most important
+    """
+    return function[0].index(max(function[0])) # Calculates the term with highest coefficient to find the most important attribute
 
 
 def get_ave(bound):
-    return float(sum(bound)/len(bound))
+    """
+    Use: Calculates the average bound for the range
+    Arguments: 
+        bound: A list consisting of the upper and lower bound for any, one particular value
+    Return: Returns the average bound
+    """
+    return float(sum(bound)/len(bound)) 
 
 
 def find_h(f, d, iter, show=False):
