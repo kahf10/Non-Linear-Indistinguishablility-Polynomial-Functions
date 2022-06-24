@@ -144,26 +144,34 @@ def get_ave(bound):
 
 
 def find_h(f, d, iter, show=False):
+    """
+    Use: Narrows down the value of h
+    Arguments:
+        f: The function we are testing h on
+        d: The factor by which we want to factor down h in each iteration
+        iter: The number of iterations we will narrow down h. The more iterations, the more accurate is the value of h.
+    Return: Returns the final upper and lower bound for h
+    """
     # Showing default tuples
 
-    i_star = getI_star(f)
+    i_star = getI_star(f) # Finds the most important attribute
 
-    hBound = [1, H_INITIAL_UPPER_BOUND]
-    tupleSet = [[2, 0], [0, 1]]
+    hBound = [1, H_INITIAL_UPPER_BOUND] # Sets the inital bounds
+    tupleSet = [[2, 0], [0, 1]] # The tuples we will be comparing at all times
     count = 0
 
-    while(count < iter):
+    while(count < iter): # Loop for the number of iterations
         shownTuple = []
         chi = []
         for j in range(d):
 
             # if j == i_star:
             #     continue
-            chi_j = hBound[0] + ((j+1)*(hBound[1]-hBound[0]))/s
+            chi_j = hBound[0] + ((j+1)*(hBound[1]-hBound[0]))/s # Narrows down the bound into s equal divisions
 
-            chi.append(chi_j)
+            chi.append(chi_j) # Stores all the bounds for the iteration
 
-            t = [chi_j, tupleSet[j][i_star]]
+            t = [chi_j, tupleSet[j][i_star]] # Cretes new tuples using the new bounds
 
             shownTuple.append(t)
 
@@ -171,7 +179,7 @@ def find_h(f, d, iter, show=False):
         # shownTuple[0][1] = 1
 
         max_score_index = getUtilityScore(f, shownTuple)
-        if(max_score_index == 0):
+        if(max_score_index == 0): # Checking which tuple has the highest score in the utility function
             hBound[1] = chi[0]
         else:
             hBound[0] = chi[0]
@@ -193,6 +201,15 @@ def find_h(f, d, iter, show=False):
 
 
 def find_l(hBound, f, d=2, iter=10, show=False):
+    """
+    Use: Narrows down the value of 'l'
+    Arguments:
+        hBound: Stores the bounds for 'h' since it is needed to calculated the value of l
+        f: The function on which 'l' will be tested
+        d: The factor by which we will narrow down 'l' in each iteration
+        iter: The number of iterations
+    Return: Returns the narrowed bound for 'l'
+    """
     # Showing default tuples
 
     s1 = [get_ave(hBound), 1]  # Control Tuple
@@ -207,7 +224,7 @@ def find_l(hBound, f, d=2, iter=10, show=False):
         chi = []
         for j in range(d):
 
-            # if j == i_star:
+            # if j == i_star :
             #     continue
             chi_j = float(lBound[0] + (j*(
                 lBound[1]-lBound[0]))/s)
@@ -239,6 +256,14 @@ def find_l(hBound, f, d=2, iter=10, show=False):
 
 
 def find_z(f, d=2, iter=10, show=False):
+    """
+    Use: Narrows down the value of 'z'
+    Arguments:
+        f: The function on which 'z' will be tested
+        d: The factor by which we will narrow down 'z' every iteration
+        iter: The number of iterations
+    Return: Returns the narrowed bound for 'z'
+    """
     # Showing default tuples
 
     s1 = [1, 0]  # Control Tuple
@@ -281,53 +306,3 @@ def find_z(f, d=2, iter=10, show=False):
             print('                                      ')
             print('                                      ')
     return zBound
-
-
-def find_a(f, hB, hL, Hz, d=2, iter=10, show=False):
-    # Showing default tuples
-    upperBounda = float(2/(math.pow(get_ave(Hz), math.log(2, get_ave(hL)))))
-    s1 = [1, 0]  # Control Tuple
-    s2 = [0, get_ave(hL)]  # Given Tuple
-    i_star = getI_star(f)
-    i = 0
-    aBound = [1, upperBounda]
-
-    print("INTITAL BOUND OF A: ", aBound)
-
-    tupleSet = [s1, s2]
-    count = 0
-
-    while(count < iter):
-        shownTuple = []
-        chi = []
-        for j in range(d):
-
-            # if j == i_star:
-            #     continue
-            chi_j = aBound[0] + (j*(
-                aBound[1]-aBound[0]))/s
-            chi.append(chi_j)
-            t = [chi_j, 0]
-            # t = [chi_j, tupleSet[j][i]]
-            shownTuple.append(t)
-
-        shownTuple[0][0] = chi_j
-        shownTuple[1][0] = 0
-        shownTuple[1][1] = get_ave(hL)
-
-        max_score_index = getUtilityScore(f, shownTuple)
-
-        aBound[max_score_index] = chi_j
-
-        count += 1
-        if(show):
-            print('=========== Round', count, '===========')
-            print(shownTuple)
-            print('================================')
-            print('USER PICKED TUPLE', max_score_index+1)
-            print('--------------------------------')
-            print('------- New Bound for a --------')
-            print(aBound)
-            print('                                      ')
-            print('                                      ')
-    return aBound
