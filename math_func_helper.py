@@ -9,12 +9,8 @@ d = 2  # NUMBER OF ATTRIBUTES TO SHOW
 
 def getRand():
     a = random.random()
-    if(a > 0.1 and a < 0.9):
-        return a
-    elif(a > 0.9):
-        return a - 0.1
-    else:
-        return a + 0.1
+
+    return a
 
 
 def randomPoly(lowestDeg, highestDeg, n=2):
@@ -24,6 +20,7 @@ def randomPoly(lowestDeg, highestDeg, n=2):
     # coefficents[0] = random.randrange(1, 5)/10  # Setting iStar
 
     return [coefficents, powers]
+
 
 
 def revCalc(ui, uis, mi, mis):

@@ -5,7 +5,8 @@ from intial_variables import *
 
 def main():
 
-    # run1time([[0.925266, 1], [9, 3]])
+
+    # run1time()
     print(run())
 
 

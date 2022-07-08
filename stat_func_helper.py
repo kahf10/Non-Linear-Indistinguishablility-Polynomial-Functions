@@ -4,14 +4,17 @@ import pandas as pd
 
 
 def run():
-    data = runSim(TIMES)
+    dataSet = DATA_SET
+    data = runSim(dataSet, TIMES)
+    # print(data)
     # u_i_df = pd.Series(u_i)
     # m_i_df = pd.Series(m_i)
     # m_istar_df = pd.Series(m_istar)
     pd.set_option('display.max_rows', None)
     df = pd.DataFrame(data).set_index('iteration')
-    df = df.sort_values(by=['m_i_diff'], ascending=True)
-
+    # print(df)
+    df = df.sort_values(by=['u_i_diff'], ascending=True)
+    # df = df[df['m_i_diff'] > 5]
     return df
 
 
@@ -22,7 +25,7 @@ def run1time(func=[]):
         f = func
 
     # f = [[0.3, 1], [4, 5]]
-    hB = find_h(f, 2, ITER_PER_ROUND)
+    hB = find_h(f, 2, ITER_PER_ROUND, True)
     hZ = find_z(f, 2, ITER_PER_ROUND)
     hL = find_l(hB, f, 2, ITER_PER_ROUND)
     # hA = find_a(f, hB, hL, hZ, 2, ITER_PER_ROUND, True)
@@ -75,7 +78,8 @@ def getDIP(newNum, ogNum):
     return round(abs(newNum-ogNum), 6)
 
 
-def runSim(times, d=2):
+def runSim(dataSet, times, d=2):
+    print(len(dataSet))
     lowestDeg, highestDeg = LOWEST_DEGREE, HIGHEST_DEGREE
     inter = ITER_PER_ROUND
     """
@@ -103,13 +107,17 @@ def runSim(times, d=2):
     new_mi = []
     new_mi_star = []
 
-    while(count < times):  # While we haven't exceeded the number of simulations
-
+    while(count < len(dataSet)):  # While we haven't exceeded the number of simulations
         # Creates a random utility function
-        f = randomPoly(lowestDeg, highestDeg)
-        hB = find_h(f, 2, inter)  # Finds the range for B
-        hL = find_l(hB, f, 2, inter)  # Finds the range for L
-        hZ = find_z(f, 2, inter)  # Finds the range for Z
+        f = dataSet[count]
+        # print(count)
+
+
+
+### MAKE CHANGES HERE <---------
+        hB = find_h(f, 2, 10)  # Finds the range for B
+        hL = find_l(hB, f, 2, 5)  # Finds the range for L
+        hZ = find_z(f, 2, 5)  # Finds the range for Z
         # hA = find_a(f, hB, hL, hZ, 2, inter)  # Finds the range for A
 
         # Finds the uI value using the above ranges
@@ -160,5 +168,7 @@ def runSim(times, d=2):
             "user m_i_star":      init_mi_star
 
         }
+
+    # print(data)
     return data
     # return u_iL, m_iL, m_i_starL  # Returns all the final values
