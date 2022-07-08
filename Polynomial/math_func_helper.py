@@ -15,8 +15,12 @@ def getRand():
     Return: Returns the value of a (adjusted if need be)
     """
     a = random.random()
-
-    return a
+    if(a > 0.1 and a < 0.9):
+        return a
+    elif(a > 0.9):
+        return a - 0.1
+    else:
+        return a + 0.1
 
 
 def randomPoly(lowestDeg, highestDeg, n=2):
@@ -34,7 +38,6 @@ def randomPoly(lowestDeg, highestDeg, n=2):
     coefficents[1] = 1  # Setting iStar 
 
     return [coefficents, powers]
-
 
 
 def revCalc(ui, uis, mi, mis):
